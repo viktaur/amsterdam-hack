@@ -17,7 +17,7 @@ pub const DETECTION_INTERVAL_MS: u64 = 500;
 /// How many samples are collected per second.
 pub const SAMPLE_RATE: u32 = 44_100; // This will probably be much higher
 // Expected dominant frequency emitted by the drone.
-pub const DRONE_FREQ: f32 = 5_000.0;
+pub const DRONE_FREQS: &[f32] = &[];
 
 pub const BANDWIDTH: f32 = 0.0; // TODO define
 
@@ -50,7 +50,7 @@ impl Actor for ProcessingActor {
         ctx.run_interval(Duration::from_millis(DETECTION_INTERVAL_MS), |act, _| {
             match compute_spectrum(&act.get_samples(), SAMPLE_RATE) {
                 Ok(spectrum) => {
-                    let score = DetectionScore::calculate(spectrum, DRONE_FREQ, BANDWIDTH);
+                    let score = DetectionScore::calculate(spectrum, DRONE_FREQS, BANDWIDTH);
 
                     // Notify all subscribers
                     for subscriber in &act.subscribers {
@@ -128,16 +128,23 @@ impl DetectionScore {
 
     fn calculate(
         spectrum: FrequencySpectrum,
-        target_freq: f32,
+        target_freqs: &[f32],
         bandwidth: f32,
     ) -> Self {
         let mut score = 0f32;
         let mut total_power = 0f32;
 
         for &(freq, power) in spectrum.data() {
-            let distance = (freq.val() - target_freq).abs();
-            let weight = (-distance.powi(2) / (2.0 * bandwidth.powi(2))).exp(); // Gaussian decay
-            score += power.val() * weight;
+            let mut max_weight = 0f32;
+
+            for &target_freq in target_freqs {
+                let distance = (freq.val() - target_freq).abs();
+                let weight = (-distance.powi(2) / (2.0 * bandwidth.powi(2))).exp(); // Gaussian decay
+                // We only care about the freq with the max weight to ensure the most relevant frequency dominates
+                max_weight = max_weight.max(weight);
+            }
+
+            score += power.val() * max_weight;
             total_power += power.val();
         }
 

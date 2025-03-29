@@ -18,7 +18,8 @@ pub struct UdpListenerActor {
 
 impl UdpListenerActor {
     pub async fn new() -> Self {
-        let socket = UdpSocket::bind(("127.0.0.1", PORT)).await.expect("UDP socket binding should have been successful");
+        let socket = UdpSocket::bind(("127.0.0.1", PORT)).await
+            .expect("UDP socket binding should have been successful");
 
         Self {
             socket: Arc::new(socket),
