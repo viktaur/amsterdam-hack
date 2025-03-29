@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use actix_web::rt::net::UdpSocket;
 use actix::prelude::*;
+use log::error;
 
 use crate::utils::parse_samples;
 use crate::processing::{ProcessingActor, AddSamples};
@@ -9,7 +10,6 @@ use crate::processing::{ProcessingActor, AddSamples};
 const PORT: u16 = 5454;
 /// Size of the buffer for UDP packets.
 pub const BUFFER_SIZE: usize = 65536;
-
 
 pub struct UdpListenerActor {
     socket: Arc<UdpSocket>,
@@ -35,7 +35,7 @@ impl Actor for UdpListenerActor {
         let socket = self.socket.clone();
 
         ctx.spawn(async move {
-            let mut buf = [0; 65536];
+            let mut buf = [0; BUFFER_SIZE];
             loop {
                 match socket.recv_from(&mut buf).await {
                     Ok((size, _)) => {
@@ -44,7 +44,7 @@ impl Actor for UdpListenerActor {
                             addr.do_send(AddSamples { samples });
                         }
                     }
-                    Err(e) => eprintln!("UDP read error: {}", e),
+                    Err(e) => error!("UDP read error: {}", e),
                 }
             }
         }.into_actor(self));

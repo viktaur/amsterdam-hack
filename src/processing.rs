@@ -1,4 +1,5 @@
 use actix::prelude::*;
+use log::{error, warn, info};
 use serde::{Serialize, Deserialize};
 use spectrum_analyzer::FrequencySpectrum;
 use std::collections::HashSet;
@@ -47,17 +48,23 @@ impl Actor for ProcessingActor {
 
     fn started(&mut self, ctx: &mut Self::Context) {
         ctx.run_interval(Duration::from_millis(DETECTION_INTERVAL_MS), |act, _| {
-            let spectrum = compute_spectrum(&act.get_samples(), SAMPLE_RATE)
-                .expect("Spectrum should have been succesfully generated");
+            match compute_spectrum(&act.get_samples(), SAMPLE_RATE) {
+                Ok(spectrum) => {
+                    let score = DetectionScore::calculate(spectrum, DRONE_FREQ, BANDWIDTH);
 
-            let score = DetectionScore::calculate(spectrum, DRONE_FREQ, BANDWIDTH);
+                    // Notify all subscribers
+                    for subscriber in &act.subscribers {
+                        subscriber.do_send(ScoreMsg(score));
+                    }
 
-            // Notify all subscribers
-            for subscriber in &act.subscribers {
-                subscriber.do_send(ScoreMsg(score));
+                    info!("Score sent to all subscribers: {}", score.score);
+
+                    act.clear_samples();
+                },
+                Err(err) => {
+                    warn!("{:?}. No problem, retrying on next interval", err);
+                }
             }
-
-            act.clear_samples();
         });
     }
 }

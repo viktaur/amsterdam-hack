@@ -1,10 +1,10 @@
-use actix::{Actor, Addr, StreamHandler, Handler};
+use actix::prelude::*;
 use actix_web_actors::ws;
 
-use crate::detection::{DetectionActor, DetectionScore, Subscribe, Unsubscribe};
+use crate::processing::{ProcessingActor, DetectionScore, Subscribe, Unsubscribe};
 
 pub struct WsActor {
-    pub detection_addr: Addr<DetectionActor>
+    pub detection_addr: Addr<ProcessingActor>
 }
 
 impl Actor for WsActor {
@@ -32,12 +32,16 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsActor {
     }
 }
 
-impl Handler<DetectionScore> for WsActor {
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct ScoreMsg(pub DetectionScore);
+
+impl Handler<ScoreMsg> for WsActor {
     type Result = ();
 
-    fn handle(&mut self, msg: DetectionScore, ctx: &mut Self::Context) {
+    fn handle(&mut self, msg: ScoreMsg, ctx: &mut Self::Context) {
         // Serialise to JSON and send to client.
-        if let Ok(json) = serde_json::to_string(&msg) {
+        if let Ok(json) = serde_json::to_string(&msg.0) {
             ctx.text(json);
         }
     }
