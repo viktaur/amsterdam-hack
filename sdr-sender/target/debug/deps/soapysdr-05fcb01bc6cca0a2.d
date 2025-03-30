@@ -1,0 +1,11 @@
+/Users/victor/Documents/rust_sandbox/amsterdam-hack/sdr-sender/target/debug/deps/libsoapysdr-05fcb01bc6cca0a2.rmeta: /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/lib.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/args.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/arginfo.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/device.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/format.rs
+
+/Users/victor/Documents/rust_sandbox/amsterdam-hack/sdr-sender/target/debug/deps/libsoapysdr-05fcb01bc6cca0a2.rlib: /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/lib.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/args.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/arginfo.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/device.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/format.rs
+
+/Users/victor/Documents/rust_sandbox/amsterdam-hack/sdr-sender/target/debug/deps/soapysdr-05fcb01bc6cca0a2.d: /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/lib.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/args.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/arginfo.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/device.rs /Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/format.rs
+
+/Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/lib.rs:
+/Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/args.rs:
+/Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/arginfo.rs:
+/Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/device.rs:
+/Users/victor/.cargo/registry/src/index.crates.io-6f17d22bba15001f/soapysdr-0.4.1/src/format.rs:

@@ -3,7 +3,7 @@ use actix::{Actor, Addr};
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
 use log::info;
-use processing::{ProcessingActor, DetectionScore, SignalWindow};
+use processing::{ProcessingActor, DetectionInfo, SignalWindow};
 use udp::UdpListenerActor;
 use websockets::WsActor;
 
@@ -15,7 +15,7 @@ mod utils;
 struct AppState {
     processing_actor: Addr<ProcessingActor>,
     udp_listener_actor: Addr<UdpListenerActor>,
-    latest_score: Arc<Mutex<DetectionScore>>,
+    latest_score: Arc<Mutex<DetectionInfo>>,
 }
 
 impl AppState {
@@ -26,7 +26,7 @@ impl AppState {
         Self {
             processing_actor,
             udp_listener_actor,
-            latest_score: Arc::new(Mutex::new(DetectionScore::new())),
+            latest_score: Arc::new(Mutex::new(DetectionInfo::new())),
         }
     }
 }
@@ -69,5 +69,7 @@ async fn ws_route(
     let ws_actor = WsActor {
         detection_addr: data.processing_actor.clone(),
     };
+    info!("Starting WS Actor");
+    // WS Actor, unlike the other two, is started once we receive a request from the client.
     ws::start(ws_actor, &req, stream)
 }

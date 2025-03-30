@@ -2,8 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+interface DroneInfo {
+  score: number,
+  timestamp: string,
+  uav_type: string,
+}
+
 export default function Home() {
-  const [score, setScore] = useState(0.0);
+  const [info, setInfo] = useState<DroneInfo | null>(null);
   const threshold = 0.7;
 
   useEffect(() => {
@@ -14,8 +20,8 @@ export default function Home() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.score !== undefined) {
-          setScore(data.score);
+        if (data !== undefined) {
+          setInfo(data);
         }
       } catch (err) {
         console.error("Error parsing Websocket message", err);
@@ -34,11 +40,12 @@ export default function Home() {
 
   return (
       <div className="flex justify-center items-center h-screen">
-        {score >= threshold ?
+        {info?.score ?? 0 >= threshold ?
           (
             <div className="flex flex-col gap-5 py-10 px-20 bg-red-600 text-white text-center font-bold rounded-lg shadow">
               <h1 className="text-4xl">DRONE DETECTED</h1>
-              <h2 className="">CONFIDENCE SCORE: {Math.round(score * 100)}%</h2>
+              <h2 className="">CLASS: {info?.uav_type} </h2>
+              <h2 className="">CONFIDENCE SCORE: {Math.round( (info?.score ?? 0) * 100 )}%</h2>
             </div>
           )
           :

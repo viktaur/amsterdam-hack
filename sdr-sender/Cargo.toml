@@ -1,0 +1,8 @@
+[package]
+name = "sdr-sender"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bytemuck = "1.22.0"
+soapysdr = "0.4.1"
